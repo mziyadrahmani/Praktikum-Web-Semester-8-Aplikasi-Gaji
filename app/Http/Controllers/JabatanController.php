@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+
 use Illuminate\Http\Request;
 use App\Models\Jabatan;
 use DataTables;
 use Alert;
 use Session;
+use PDF;
 
 
 
@@ -114,5 +116,33 @@ class JabatanController extends Controller
         $jabatan->destroy($jabatan->id);
         Alert::success('Sukses', 'Berhasil Menghapus Jabatan ');
         return redirect()->route('jabatan.index');
+    }
+
+    public function printPdf()
+    {
+        $jabatan = Jabatan::all();
+
+        $pdf = PDF::loadView('masterdata.jabatan._pdf', compact('jabatan'));
+        $pdf->setPaper('A4', 'landscape');
+        return $pdf->stream('Data Gaji.pdf', array("Attachment" => false));
+    }
+    public function grafikJabatan()
+    {
+        return view('masterdata.jabatan.chart');
+    }
+
+    public function getGrafik()
+    {
+        $jabatan = Jabatan::select('nama_jabatan', 'gapok_jabatan')->get();
+        return response()->json([
+            'data' => $jabatan
+        ]);
+    }
+
+    public function exportExcel()
+    {
+        $jabatan = Jabatan::all();
+
+        return view('masterdata.jabatan._excel', compact('jabatan'));
     }
 }

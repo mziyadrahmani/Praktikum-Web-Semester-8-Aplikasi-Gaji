@@ -36,4 +36,9 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth']], function () {
         LokasiController::class,
         'getLokasi'
     ])->name('get.lokasi');
+    Route::get('print-pdf', [JabatanController::class, 'printPdf'])->name('print.jabatan');
+    //kita tambahkan juga untuk memanggil method grafik dan export excel
+    Route::get('grafik-jabatan', [JabatanController::class, 'grafikJabatan'])->name('grafik.jabatan');
+    Route::get('get-grafik', [JabatanController::class, 'getGrafik'])->name('get.grafik.jabatan');
+    Route::get('export-excel', [JabatanController::class, 'exportExcel'])->name('export.excel');
 });
